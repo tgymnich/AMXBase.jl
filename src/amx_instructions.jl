@@ -1,18 +1,15 @@
+using LLVM
+using LLVM.Interop
+
 @inline function amx_nop_op_imm5(op::UInt32, imm5::UInt32)
-    Base.llvmcall("""
-      call void asm sideeffect "nop", ""()
-      call void asm sideeffect "nop", ""()
-      call void asm sideeffect "nop", ""()
-      call void asm sideeffect ".word (0x201000 + (\$0 << 5) + \$1)", "i,i,~{memory}"(i32 %0, i32 %1)
-      ret void""",
-    Cvoid, Tuple{UInt32, UInt32}, op, imm5)
+  @asmcall("nop")
+  @asmcall("nop")
+  @asmcall("nop")
+  @asmcall(".word (0x201000 + (\$0 << 5) + \$1)", "i,i,~{memory}", Nothing, Tuple{UInt32, UInt32}, op, imm5)
 end
 
 @inline function amx_op_gpr(op::UInt32, gpr::UInt64)
-    Base.llvmcall("""
-      call void asm sideeffect ".word (0x201000 + (\$0 << 5) + 0\$1 - ((0\$1 >> 4) * 6))", "i,r,~{memory}"(i32 %0, i64 %1)
-      ret void""",
-    Cvoid, Tuple{UInt32, UInt64}, op, gpr)
+  @asmcall(".word (0x201000 + (\$0 << 5) + 0\$1 - ((0\$1 >> 4) * 6))", "i,r,~{memory}", Nothing, Tuple{UInt32, UInt64}, op, gpr)
 end
 
 

@@ -104,7 +104,7 @@ end
 end
 
 
-@inline function amx_operands_other(source_offset, source_y, dest_index_lo, dest_index_hi = 0, 
+@inline function amx_operands_other(source_offset, source_y, dest_index_lo, dest_index_hi, 
                                     dest_y, dest_z, mode, table_from_y, table_index)
     @assert xor(dest_y,dest_z)
 
