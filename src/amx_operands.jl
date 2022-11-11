@@ -28,7 +28,18 @@ end
     return op
 end
 
+
+@enum XY_Enable_Mode begin
+    all_lanes = 0 # Enable all lanes (enable_x/y: 0), or odd lanes only (enable_x/y: 1), or even lanes only (enable_x/y: 2),
+    lane_N = 1
+    first_N_lanes = 2
+    last_N_lanes = 3
+end
+
 """
+*offset_y:* offset into the y register pool in bytes
+*offset_x:* offset into the y register pool in bytes
+
 x*y+z
 """
 @inline function amx_operands_floating_point_arithmetic(offset_y, offset_x, row_z, skip_z, skip_y, skip_x, 
@@ -83,6 +94,22 @@ z+((x*y)>>s)
     op = bset(op, 62, z_i32)
     op = bset(op, 63, vector_mode)
     return op
+end
+
+
+@enum ALU_Modes fma = 0 fms = 1 relu = 4
+
+@enum Lane_Width_Modes begin
+ all_rows_interleaved_pairs = 3 
+ one_row_from_each_four = 4
+ one_row_from_each_eight = 7 
+ one_row_from_each_two = 6 # using 6 as a placehoder for anything
+end
+
+@enum XY_Enable_Modes_Int begin
+    first_n_lanes = 4
+    last_n_lanes = 5
+    no_langes = 6
 end
 
 """
