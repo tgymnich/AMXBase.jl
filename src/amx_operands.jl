@@ -12,7 +12,7 @@ using BitOperations
     return op
 end
 
-@inline function amx_operands_memory_z(pointer, row_Z, double_width)
+@inline function amx_operands_memory_z(pointer, row_z, double_width)
     op = UInt64(0)
     op = bset(op, 0:55, pointer)
     op = bset(op, 56:61, row_z)
@@ -24,7 +24,7 @@ end
     op = UInt64(0)
     op = bset(op, 0:55, pointer)
     op = bset(op, 56, right_hand_half)
-    op = bset(op, 56:61, row_z)
+    op = bset(op, 57:61, row_z)
     return op
 end
 

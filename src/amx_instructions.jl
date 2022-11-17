@@ -45,7 +45,7 @@ y[i] = memory[i]
 """
 z[i] = memory[i]
 """
-@inline amx_ldzr(gpr) = amx_op_gpr(UInt32(4), gpr)
+@inline amx_ldz(gpr) = amx_op_gpr(UInt32(4), gpr)
 
 """
 z[_][i] = memory[i]
