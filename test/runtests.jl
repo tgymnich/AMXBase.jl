@@ -106,11 +106,11 @@ end
 
 @testset "Test mat mul" begin
     a = valloc(Float32, 128, 128)
-    a .= collect(1:128)
+    a .= rand(128)
     a = reshape(a, (16,8))
 
     b = valloc(Float32, 128, 128)
-    b .= collect(1:128)
+    b .= rand(128)
     b = reshape(b, (16,8))
 
     c = valloc(Float32, 128, 1024)
