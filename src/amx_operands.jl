@@ -4,10 +4,11 @@ using BitOperations
 
 @inline ptr_row(ptr, row) = (row << 56) | ptr
 
-@inline function amx_operands_memory_xy(pointer, register_index, double_width)
+@inline function amx_operands_memory_xy(pointer, register_index, multiple, double_width)
     op = UInt64(0)
     op = bset(op, 0:55, pointer)
     op = bset(op, 56:58, register_index)
+    op = bset(op, 60, multiple) # M2 only
     op = bset(op, 62, double_width)
     return op
 end
@@ -26,14 +27,6 @@ end
     op = bset(op, 56, right_hand_half)
     op = bset(op, 57:61, row_z)
     return op
-end
-
-
-@enum XY_Enable_Mode begin
-    all_lanes = 0 # Enable all lanes (enable_x/y: 0), or odd lanes only (enable_x/y: 1), or even lanes only (enable_x/y: 2),
-    lane_N = 1
-    first_N_lanes = 2
-    last_N_lanes = 3
 end
 
 """
@@ -104,12 +97,6 @@ end
  one_row_from_each_four = 4
  one_row_from_each_eight = 7 
  one_row_from_each_two = 6 # using 6 as a placehoder for anything
-end
-
-@enum XY_Enable_Modes_Int begin
-    first_n_lanes = 4
-    last_n_lanes = 5
-    no_langes = 6
 end
 
 """
