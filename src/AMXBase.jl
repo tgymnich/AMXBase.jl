@@ -2,6 +2,8 @@ module AMXBase
 
 const supported_cpus = ["apple-m1", "apple-m2"]
 
+include("utils.jl")
+
 # low-level
 include("amx_instructions.jl")
 include("amx_operands.jl")

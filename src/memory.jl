@@ -1,6 +1,5 @@
 using BitOperations
 
-
 @enum RegisterCount begin
     one
     two
@@ -8,18 +7,20 @@ using BitOperations
 end
 
 
+export ldx, ldy, ldz, ldzi, stx, sty, stz, stzi
+
 """
 Load pair
 x[i] = memory[i]
 
 # Arguments
 - `pointer::UInt64`: the pointer.
-- `register_index::Unsigned`: X register index.
+- `register_index::Integer`: X register index.
 - `register_count::RegisterCount`: Either one, two or four.
 """
-@inline function ldx(pointer::UInt64; register_index::Unsigned=0, register_count::RegisterCount=one)
+@inline function ldx(pointer::UInt64; register_index::Integer=0, register_count::RegisterCount=one)
     two_registers = register_count != one
-    four_registers = register_count == two || register_count == four
+    four_registers = register_count == four
     
     return amx_ldx(amx_operands_memory_xy(pointer, register_index, four_registers, two_registers))
 end
@@ -31,12 +32,12 @@ y[i] = memory[i]
 
 # Arguments
 - `pointer::UInt64`: the pointer.
-- `register_index::Unsigned`: Y register index.
+- `register_index::Integer`: Y register index.
 - `register_count::RegisterCount`: Either one, two or four.
 """
-@inline function ldy(pointer::UInt64; register_index::Unsigned=0, register_count::RegisterCount=one)
+@inline function ldy(pointer::UInt64; register_index::Integer=0, register_count::RegisterCount=one)
     two_registers = register_count != one
-    four_registers = register_count == two || register_count == four
+    four_registers = register_count == four
     
     return amx_ldy(amx_operands_memory_xy(pointer, register_index, four_registers, two_registers))
 end
@@ -48,10 +49,10 @@ z[i] = memory[i]
 
 # Arguments
 - `pointer::UInt64`: the pointer.
-- `register_index::Unsigned`: Z row.
+- `register_index::Integer`: Z row.
 - `double_width::Bool`: Load / store pair of registers (1) or single register (0).
 """
-@inline function ldz(pointer::UInt64; register_index::Unsigned=0, double_width::Bool=false)   
+@inline function ldz(pointer::UInt64; register_index::Integer=0, double_width::Bool=false)   
     return amx_ldz(amx_operands_memory_z(pointer, register_index, double_width))
 end
 
@@ -62,10 +63,10 @@ z[_][i] = memory[i]
 
 # Arguments
 - `pointer::UInt64`: the pointer.
-- `register_index::Unsigned`: Z row (high 5 bits thereof).
+- `register_index::Integer`: Z row (high 5 bits thereof).
 - `right_hand_half::Bool`: Right hand half (1) or left hand half (0) of Z register pair.
 """
-@inline function ldzi(pointer::UInt64; register_index::Unsigned=0, right_hand_half::Bool=false)  
+@inline function ldzi(pointer::UInt64; register_index::Integer=0, right_hand_half::Bool=false)  
     return amx_ldzi(amx_operands_memory_zi(pointer, right_hand_half, register_index))
 end
 
@@ -83,7 +84,7 @@ memory[i] = x[i]
 - `register_index::Integer`: X register index.
 - `double_width::RegisterCount`: Store pair of registers (1) or single register (0).
 """
-@inline function stx(pointer::UInt64; register_index::Unsigned=0, double_width::Bool=false)
+@inline function stx(pointer::UInt64; register_index::Integer=0, double_width::Bool=false)
     return amx_stx(amx_operands_memory_xy(pointer, register_index, false, double_width))
 end
 
@@ -97,8 +98,8 @@ memory[i] = y[i]
 - `register_index::Integer`: Y register index.
 - `double_width::RegisterCount`: Store pair of registers (1) or single register (0).
 """
-@inline function sty(pointer::UInt64; register_index::Unsigned=0, double_width::Bool=false)
-    return amx_sty(amx_operands_memory_xy(pointer, register_index, false, double_width))
+@inline function sty(pointer::UInt64; register_index::Integer=0, double_width::Bool=false)
+    amx_sty(amx_operands_memory_xy(pointer, register_index, false, double_width))
 end
 
 
@@ -111,8 +112,8 @@ memory[i] = z[i]
 - `register_index::Integer`: Y register index.
 - `register_count::RegisterCount`: Either one, two or four
 """
-@inline function stz(pointer::UInt64; register_index::Unsigned=0, double_width::Bool=false)   
-    return amx_stz(amx_operands_memory_z(pointer, register_index, double_width))
+@inline function stz(pointer::UInt64; register_index::Integer=0, double_width::Bool=false)   
+    amx_stz(amx_operands_memory_z(pointer, register_index, double_width))
 end
 
 
@@ -125,6 +126,6 @@ memory[i] = z[_][i]
 - `register_index::Integer`: Y register index.
 - `register_count::RegisterCount`: Either one, two or four
 """
-@inline function stzi(pointer::UInt64; register_index::Unsigned=0, right_hand_half::Bool=false)  
-    return amx_stzi(amx_operands_memory_zi(pointer, right_hand_half, register_index))
+@inline function stzi(pointer::UInt64; register_index::Integer=0, right_hand_half::Bool=false)  
+    amx_stzi(amx_operands_memory_zi(pointer, right_hand_half, register_index))
 end
